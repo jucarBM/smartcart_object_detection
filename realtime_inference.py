@@ -8,15 +8,19 @@ from imutils.video import FPS
 from centroidtracker import CentroidTracker
 from trackableobject import TrackableObject
 import tensorflow as tf
+from pyzbar.pyzbar import decode
 
 PATH_TO_MODEL_DIR = "models/fine_tuned_model_5000_ds"
 PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
 SHOW_VIDEO = True
 
-TRESHOLD = 0.25
+TRESHOLD = 0.7
 detect_fn = tf.saved_model.load(PATH_TO_SAVE_MODEL)
 
 vid = cv2.VideoCapture(0)
+ # set resolution to 1920×1080
+vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 # Definimos ancho y alto
 W = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
 H = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -29,7 +33,7 @@ while(True):
 
     if frame is None:
         break
-
+    sku = "none"
     image_np = np.array(frame)
 
     input_tensor = tf.convert_to_tensor(image_np)
@@ -49,14 +53,20 @@ while(True):
         box = [xmin, ymin, xmax, ymax] * np.array([W, H, W, H])
 
         (startX, startY, endX, endY) = box.astype("int")
+        cutImage = frame[startY:endY, startX:endX]
+        barcodes_detected = decode(cutImage)
+        for barcode in barcodes_detected:
+            sku = str(barcode.data.decode("utf-8"))
+
         if SHOW_VIDEO:
             cv2.rectangle(frame, (startX, startY),
                           (endX, endY), (255, 0, 255), 2)
-            cv2.putText(frame, str(detection_scores[x])+" "+str(idx), (startX, startY),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-            cutImage = frame[startY:endY, startX:endX]
+            cv2.putText(frame, str(round(100*detection_scores[x]))+" "+str(sku), 
+                        (startX, startY),
+                        cv2.FONT_HERSHEY_SIMPLEX, 
+                        0.6, (0, 0, 255), 2)
         cv2.imwrite(
-            f'Images/barcodes/{count}_{str(detection_scores[x])}_{idx}.jpeg', cutImage)
+            f'Images/barcodes/{count}_{str(detection_scores[x])}_{idx}.png', cutImage)
         count += 1
     # Display the resulting frame
     if SHOW_VIDEO:

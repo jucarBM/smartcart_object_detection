@@ -12,7 +12,7 @@ from pyzbar.pyzbar import decode
 
 PATH_TO_MODEL_DIR = "models/fine_tuned_model_5000_ds"
 PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
-SHOW_VIDEO = True
+SHOW_VIDEO = False
 
 TRESHOLD = 0.7
 detect_fn = tf.saved_model.load(PATH_TO_SAVE_MODEL)
@@ -30,6 +30,16 @@ while(True):
     # Capture the video frame
     # by frame
     ret, frame = vid.read()
+
+    # experimental
+    # *************************************************************
+    final = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #equ = cv2.equalizeHist(gray)
+    # threshold
+    #clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(5, 5))
+    # final = clahe.apply(gray)   
+
+    # *************************************************************
 
     if frame is None:
         break
@@ -53,10 +63,11 @@ while(True):
         box = [xmin, ymin, xmax, ymax] * np.array([W, H, W, H])
 
         (startX, startY, endX, endY) = box.astype("int")
-        cutImage = frame[startY:endY, startX:endX]
+        cutImage = final[startY:endY, startX:endX]
         barcodes_detected = decode(cutImage)
         for barcode in barcodes_detected:
             sku = str(barcode.data.decode("utf-8"))
+            print(f'Detected {sku}')
 
         if SHOW_VIDEO:
             cv2.rectangle(frame, (startX, startY),
@@ -66,7 +77,7 @@ while(True):
                         cv2.FONT_HERSHEY_SIMPLEX, 
                         0.6, (0, 0, 255), 2)
         cv2.imwrite(
-            f'Images/barcodes/{count}_{str(detection_scores[x])}_{idx}.png', cutImage)
+            f'Images/barcodes/{count}_{str(detection_scores[x])}_{sku}.png', cutImage)
         count += 1
     # Display the resulting frame
     if SHOW_VIDEO:

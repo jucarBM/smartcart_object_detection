@@ -7,8 +7,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from imutils.video import VideoStream
 from imutils.video import FPS
-from centroidtracker import CentroidTracker
-from trackableobject import TrackableObject
+from utils.centroidtracker import CentroidTracker
+from utils.trackableobject import TrackableObject
 import tensorflow as tf
 
 PATH_TO_MODEL_DIR = "fine_tuned_model_bars"

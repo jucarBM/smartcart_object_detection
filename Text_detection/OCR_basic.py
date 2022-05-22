@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-import pytesseract
-import keras_ocr
 
 # show loop frames from webcam using opencv
 
@@ -19,7 +17,7 @@ while True:
     # count += 1
     # *********************************
     # Processing of frames goes here
-    
+
     # *********************************
 
     cv2.imshow('frame', frame)

@@ -17,14 +17,14 @@ TRESHOLD = 0.7
 detect_fn = tf.saved_model.load(PATH_TO_SAVE_MODEL)
 
 vid = cv2.VideoCapture(1)
- # set resolution to 1920×1080, 3264 x 2448;
+# set resolution to 1920×1080, 3264 x 2448;
 vid.set(cv2.CAP_PROP_FRAME_WIDTH, 3264)
 vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 2448)
 # Definimos ancho y alto
 W = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
 H = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
 count = 0
-while(True):
+while True:
 
     # Capture the video frame
     # by frame
@@ -32,9 +32,9 @@ while(True):
 
     # experimental
     # *************************************************************
-    #final = frame
+    # final = frame
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    #equ = cv2.equalizeHist(gray)
+    # equ = cv2.equalizeHist(gray)
     # threshold
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(5, 5))
     final = clahe.apply(gray)   

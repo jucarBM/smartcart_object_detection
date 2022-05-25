@@ -3,6 +3,7 @@ from threading import Thread, Event
 import time
 # import numpy as np
 
+
 class Camera(Thread):
     def __init__(self, cameraID, cam_name, type_process="normal"):
         super().__init__()
@@ -28,8 +29,13 @@ def run_camera(camera_object, cameraID, cam_name, type_process) -> None:
 
         # display frame
         result = process_frame(frame, type_process)
-        texted = write_frame(result, camera_object.text)
-        cv2.imshow(cam_name, texted)
+        # get info from the frame
+        data = detect(result)
+        # draw things in the frame
+        drawed = write_frame(result, camera_object.text)
+
+        # show the frame
+        cv2.imshow(cam_name, drawed)
 
         # wait for user to press 'q'
         if cv2.waitKey(1) & 0xFF == ord('a'):
@@ -64,6 +70,10 @@ def process_frame(frame, type_process):
 
     # return the result
         return canny
+
+
+def detect(frame):
+    return 0
 
 
 def compare2cameras(cam1, cam2):

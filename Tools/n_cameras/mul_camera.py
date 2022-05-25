@@ -84,22 +84,22 @@ def run_camera(camera_object, cameraID, cam_name) -> None:
         # display frame
         result = camera_object.function_preprocess(frame)
         # store 8 frames in a list
-        pila.append(result)
-        if len(pila) > 8:
-            pila.pop(0)
+        # pila.append(result)
+        # if len(pila) > 8:
+        #    pila.pop(0)
         # sum of frames in pila
-        sum_pila = sum(pila)
+        # sum_pila = sum(pila)
         # opening
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        sum_pila = cv2.morphologyEx(sum_pila, cv2.MORPH_CLOSE, kernel)
+        # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        # sum_pila = cv2.morphologyEx(sum_pila, cv2.MORPH_CLOSE, kernel)
         # get info from the frame
-        data = camera_object.function_detect(sum_pila)
+        data = camera_object.function_detect(result)
         # draw things in the frame
-        drawed = camera_object.function_write(sum_pila, camera_object.text, data)
+        drawed = camera_object.function_write(result, camera_object.text, data)
 
         # show the frame
         cv2.imshow(cam_name, drawed)
-        cv2.imshow('Frame', frame)
+        # cv2.imshow('Frame', frame)
 
         # wait for user to press 'q'
         if cv2.waitKey(1) & 0xFF == ord('a'):

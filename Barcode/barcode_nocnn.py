@@ -11,7 +11,7 @@ SHOW_VIDEO = True
 TRESHOLD = 0.7
 detect_fn = tf.saved_model.load(PATH_TO_SAVE_MODEL)
 
-vid = cv2.VideoCapture(1)
+vid = cv2.VideoCapture(0)
  # set resolution to 1920×1080, 3264 x 2448;
 vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)

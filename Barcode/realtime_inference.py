@@ -81,7 +81,8 @@ while True:
         count += 1
     # Display the resulting frame
     if SHOW_VIDEO:
-        cv2.imshow('frame', frame)
+        resizedFrame = cv2.resize(frame,(0,0),fx = 0.20,fy = 0.20)
+        cv2.imshow('frame', resizedFrame)
         # the 'q' button is set as the
         # quitting button you may use any
         # desired button of your choice

@@ -27,10 +27,10 @@ while(1):
 	# Get the foreground mask
 	fgmask = fgbg.apply(resizedFrame)
     # ------------------------------------------------
-	# gauss_filter = cv2.GaussianBlur(fgmask,(5,5),3)
-	# median_blur = cv2.medianBlur(fgmask,5)
-
-	# kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(15,15))
+	gauss_filter = cv2.GaussianBlur(fgmask,(5,5),3)
+	median_blur = cv2.medianBlur(fgmask,5)
+    
+	kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(15,15))
     # cierre = cv2.morphologyEx(gauss_filter,cv2.MORPH_CLOSE,kernel) 
 	# dilate = cv2.dilate(gauss_filter,None,iterations=2) 
     # # ----------------------------------------------------------------
@@ -41,7 +41,7 @@ while(1):
 
 	# Determine how many pixels do you want to detect to be considered "movement"
 	
-	if (frameCount > 1 and count > 5000 and count < 9000):
+	if (frameCount > 1 and count > 4000 and count < 9000):
         # find contours or continuous white blobs in the image
 		contours, hierarchy = cv2.findContours(fgmask.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 

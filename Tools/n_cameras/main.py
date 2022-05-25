@@ -5,8 +5,8 @@ from threading import Thread
 
 if __name__ == "__main__":
     # create camera objects
-    cam1 = Camera(0, "zero", "normal")
-    cam2 = Camera(1, "one", "normal")
+    cam1 = Camera(0, "zero")
+    cam2 = Camera(1, "one")
     main_thread = Thread(target=compare2cameras, args=(cam1, cam2,))
     # run the cameras
     cam1.start()

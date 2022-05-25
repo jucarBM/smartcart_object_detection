@@ -4,54 +4,11 @@ import time
 # import numpy as np
 
 
-class Camera(Thread):
-    def __init__(self, cameraID, cam_name, type_process="normal"):
-        super().__init__()
-        self.cameraID = cameraID
-        self.cam_name = cam_name
-        self.type_process = type_process
-        self.detect: bool = False
-        self.event = Event()
-        self.text = "Default"
-
-    def run(self):
-        run_camera(self, self.cameraID, self.cam_name, self.type_process)
-
-
-def run_camera(camera_object, cameraID, cam_name, type_process) -> None:
-    #  open camera using opencv
-    cap = cv2.VideoCapture(cameraID)
-
-    # loop camera until user presses 'q'
-    while True:
-        # read frame
-        _, frame = cap.read()
-
-        # display frame
-        result = process_frame(frame, type_process)
-        # get info from the frame
-        data = detect(result)
-        # draw things in the frame
-        drawed = write_frame(result, camera_object.text)
-
-        # show the frame
-        cv2.imshow(cam_name, drawed)
-
-        # wait for user to press 'q'
-        if cv2.waitKey(1) & 0xFF == ord('a'):
-            camera_object.detect = True
-            camera_object.text = "Camera detected!"
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            camera_object.event.set()
-            break
-
-
-def write_frame(frame, text):
+def write_frame(frame, text, data):
     return cv2.putText(frame, text, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
 
-def process_frame(frame, type_process):
+def process_frame(frame, type_process="normal"):
     if type_process == "normal":
         return frame
     elif type_process == "gray":
@@ -93,3 +50,62 @@ def compare2cameras(cam1, cam2):
 
         # else:
         #    print(f'Camera 1: {cam1.detect} Camera 2: {cam2.detect}')
+
+
+class Camera(Thread):
+    def __init__(self, cameraID, cam_name,
+                 function_preprocess=process_frame,
+                 function_detect=detect,
+                 function_write=write_frame):
+        super().__init__()
+        self.cameraID = cameraID
+        self.cam_name = cam_name
+        self.function_preprocess = function_preprocess
+        self.function_detect = function_detect
+        self.function_write = function_write
+        self.detect: bool = False
+        self.event = Event()
+        self.text = "Default"
+
+    def run(self):
+        run_camera(self, self.cameraID, self.cam_name)
+
+
+def run_camera(camera_object, cameraID, cam_name) -> None:
+    #  open camera using opencv
+    cap = cv2.VideoCapture(cameraID)
+    pila = []
+
+    # loop camera until user presses 'q'
+    while True:
+        # read frame
+        _, frame = cap.read()
+
+        # display frame
+        result = camera_object.function_preprocess(frame)
+        # store 8 frames in a list
+        pila.append(result)
+        if len(pila) > 8:
+            pila.pop(0)
+        # sum of frames in pila
+        sum_pila = sum(pila)
+        # opening
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        sum_pila = cv2.morphologyEx(sum_pila, cv2.MORPH_CLOSE, kernel)
+        # get info from the frame
+        data = camera_object.function_detect(sum_pila)
+        # draw things in the frame
+        drawed = camera_object.function_write(sum_pila, camera_object.text, data)
+
+        # show the frame
+        cv2.imshow(cam_name, drawed)
+        cv2.imshow('Frame', frame)
+
+        # wait for user to press 'q'
+        if cv2.waitKey(1) & 0xFF == ord('a'):
+            camera_object.detect = True
+            camera_object.text = "Camera detected!"
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            camera_object.event.set()
+            break

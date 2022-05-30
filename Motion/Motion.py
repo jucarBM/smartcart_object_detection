@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Video Capture 
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(1)
 
 
 # History, Threshold, DetectShadows 
@@ -41,7 +41,7 @@ while(1):
 
 	# Determine how many pixels do you want to detect to be considered "movement"
 	
-	if (frameCount > 1 and count > 4000 and count < 9000):
+	if (frameCount > 1 and count > 3000 and count < 6000):
         # find contours or continuous white blobs in the image
 		contours, hierarchy = cv2.findContours(fgmask.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 

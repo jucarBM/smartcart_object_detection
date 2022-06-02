@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-import enviouart.py as ipo
+#import enviouart.py as ipo
 # Video Capture 
 capture = cv2.VideoCapture('v4l2src device=/dev/video0 io-mode=2 ! image/jpeg, width=1920, height=1080, framerate=30/1 !  nvjpegdec ! video/x-raw ! videoconvert ! video/x-raw,format=BGR ! appsink', cv2.CAP_GSTREAMER)
 capture1 = cv2.VideoCapture('v4l2src device=/dev/video1 io-mode=2 ! image/jpeg, width=1920, height=1080, framerate=30/1 !  nvjpegdec ! video/x-raw ! videoconvert ! video/x-raw,format=BGR ! appsink', cv2.CAP_GSTREAMER)
@@ -68,8 +68,8 @@ while(1):
 		
 			# add text to the frame
 			cv2.putText(resizedFrame, "Largest Contour", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-			ipo.serial ()
-			ipo.HandShake(detect)
+			#ipo.serial ()
+			#ipo.HandShake(detect)
 			
 			
 		if len(contours1) > 0:
@@ -87,8 +87,8 @@ while(1):
 		
 			# add text to the frame
 			cv2.putText(resizedFrame1, "Largest Contour", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-			ipo.serial ()
-			ipo.HandShake(detect)
+			#ipo.serial ()
+			#ipo.HandShake(detect)
 		print('detect')
 		cv2.putText(resizedFrame, 'detect', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 		cv2.putText(resizedFrame1, 'detect', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)

@@ -9,17 +9,19 @@ from utils.centroidtracker import CentroidTracker
 from utils.trackableobject import TrackableObject
 import tensorflow as tf
 from pyzbar.pyzbar import decode
-PATH_TO_MODEL_DIR = "models/fine_tuned_model_5000_ds"
+PATH_TO_MODEL_DIR = "models/converted"
 # PATH_TO_MODEL_DIR = "../Barcode/models/fine_tuned_model_5000_ds"
-PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
+# PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
+PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR
 SHOW_VIDEO = True
 TRESHOLD = 0.7
 detect_fn = tf.saved_model.load(PATH_TO_SAVE_MODEL)
 
-vid = cv2.VideoCapture(1)
+# Video Capture 
+vid = cv2.VideoCapture('v4l2src device=/dev/video0 io-mode=2 ! image/jpeg, width=1920, height=1080, framerate=30/1 !  nvjpegdec ! video/x-raw ! videoconvert ! video/x-raw,format=BGR ! appsink', cv2.CAP_GSTREAMER)
 # set resolution to 1920×1080, 3264 x 2448;
-vid.set(cv2.CAP_PROP_FRAME_WIDTH, 3264)
-vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 2448)
+# vid.set(cv2.CAP_PROP_FRAME_WIDTH, 3264)
+# vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 2448)
 # Definimos ancho y alto
 W = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
 H = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))

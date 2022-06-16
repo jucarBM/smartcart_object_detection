@@ -5,17 +5,17 @@ import serial
 print("UART Demonstration Program")
 print("NVIDIA Jetson Nano Developer Kit")
 
-def serial ():
-	serial_port = serial.Serial(
-		port="/dev/ttyTHS1",
-		baudrate=115200,
-		bytesize=serial.EIGHTBITS,
-		parity=serial.PARITY_NONE,
-		stopbits=serial.STOPBITS_ONE
-	)
+serial_port = serial.Serial(
+	port="/dev/ttyTHS1",
+	baudrate=115200,
+	bytesize=serial.EIGHTBITS,
+	parity=serial.PARITY_NONE,
+	stopbits=serial.STOPBITS_ONE
+)
 # Wait a second to let the port initialize
 time.sleep(1)
-sku = 7750243057448
+sku = "7750243057448"
+sku2 = "1234765243564"
 
 def mandar_sku(mensaje):
 	
@@ -28,6 +28,22 @@ def mandar_sku(mensaje):
 
 def HandShake(mensajee):
 	serial_port.write(mensajee.encode())
+	
+def mensajitoxd(sku):
+	
+	try:
+		serial_port.write("Hola".encode())
+		print("te envie hola")
+		# data  = serial_port.readline(5)
+		# data  =data.decode()
+		# datastr  =  str(data)
+		#print(datastr)
+		#if datastr  =="Hola2":
+			
+		serial_port.write(sku.encode())
+		#print("entro")
+	except:
+		print("Algo esta mal en comunicacion")
 		
 while True:
 	'''
@@ -54,22 +70,10 @@ while True:
 	
 	'''
 	
-	
-	HandShake("Hola")
-	
-	#if serial_port.inWaiting() > 0:
-	data=serial_port.read(5)
-	data=data.decode()
-	data_str = str(data)
-	
-	if data_str == "Hola2":
-		serial_port.write('7750243057448'.encode())
-		print(data_str)
-		
-	else:
-		HandShake("Hola")
-		
-				
+	print(serial_port.is_open)
+	mensajitoxd(sku)
+	mensajitoxd(sku2)
+
 			
 			
 			

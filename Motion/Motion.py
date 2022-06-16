@@ -2,6 +2,12 @@ import cv2
 import numpy as np
 
 import enviouart.py as ipo
+
+#!/usr/bin/python3
+import time
+import serial
+
+
 # Video Capture 
 capture = cv2.VideoCapture('v4l2src device=/dev/video0 io-mode=2 ! image/jpeg, width=1920, height=1080, framerate=30/1 !  nvjpegdec ! video/x-raw ! videoconvert ! video/x-raw,format=BGR ! appsink', cv2.CAP_GSTREAMER)
 capture1 = cv2.VideoCapture('v4l2src device=/dev/video1 io-mode=2 ! image/jpeg, width=1920, height=1080, framerate=30/1 !  nvjpegdec ! video/x-raw ! videoconvert ! video/x-raw,format=BGR ! appsink', cv2.CAP_GSTREAMER)
@@ -15,6 +21,32 @@ fgbg = cv2.createBackgroundSubtractorMOG2(200, 200, True)
 frameCount = 0
 frameCount1 = 0
 
+
+serial_port = serial.Serial(
+    port="/dev/ttyTHS1",
+    baudrate=115200,
+    bytesize=serial.EIGHTBITS,
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+)
+# Wait a second to let the port initialize
+time.sleep(1)
+
+
+
+def mensajitoxd(sku):
+	serial_port.write("Hola".encode())
+	print("te envie hola")
+	data  = serial_port.readline(5)/dev/ttyTHS1
+	data  =data.decode()
+	datastr  =  str(data)
+	print(datastr)
+	if datastr  =="Hola2":
+		
+		serial_port.write(sku.encode())
+		print("entro")
+		
+		
 while(1):
 	# Return Value and the current frame
 	ret, frame = capture.read()
@@ -68,8 +100,7 @@ while(1):
 		
 			# add text to the frame
 			cv2.putText(resizedFrame, "Largest Contour", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-			ipo.serial ()
-			ipo.HandShake(detect)
+			mensajitoxd(detect)
 			
 			
 		if len(contours1) > 0:
@@ -87,8 +118,7 @@ while(1):
 		
 			# add text to the frame
 			cv2.putText(resizedFrame1, "Largest Contour", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-			ipo.serial ()
-			ipo.HandShake(detect)
+			mensajitoxd(detect)
 		print('detect')
 		cv2.putText(resizedFrame, 'detect', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
 		cv2.putText(resizedFrame1, 'detect', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)

@@ -9,7 +9,7 @@ from utils.centroidtracker import CentroidTracker
 from utils.trackableobject import TrackableObject
 import tensorflow as tf
 # from pyzbar.pyzbar import decode
-PATH_TO_MODEL_DIR = "models/fine_tuned_model_jabon_final"
+PATH_TO_MODEL_DIR = "models/fine_tuned_model_last"
 # PATH_TO_MODEL_DIR = "../Barcode/models/fine_tuned_model_5000_ds"
 PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
 # PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR
@@ -26,6 +26,7 @@ vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 W = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
 H = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
 count = 0
+class_name = ['none', 'leche_laive', 'chips_ahoy', 'jabon_bolivar']
 while True:
 
     # Capture the video frame
@@ -58,9 +59,12 @@ while True:
     detection_scores = np.array(detections["detection_scores"][0])
     # Realizamos una limpieza para solo obtener las clasificaciones mayores al umbral.
     detection_clean = [x for x in detection_scores if x >= TRESHOLD]
+    # print(detections)
+
     # Recorremos las detecciones
     for x in range(len(detection_clean)):
         idx = int(detections['detection_classes'][0][x])
+        name = class_name[idx]
         # Tomamos los bounding box
         ymin, xmin, ymax, xmax = np.array(
             detections['detection_boxes'][0][x])
@@ -76,7 +80,7 @@ while True:
         if SHOW_VIDEO:
             cv2.rectangle(frame, (startX, startY),
                           (endX, endY), (255, 0, 255), 2)
-            cv2.putText(frame, str(round(100*detection_scores[x]))+" "+str(idx), 
+            cv2.putText(frame, str(round(100*detection_scores[x]))+" "+name, 
                         (startX, startY),
                         cv2.FONT_HERSHEY_SIMPLEX, 
                         0.6, (0, 0, 255), 2)
@@ -85,7 +89,7 @@ while True:
         count += 1
     # Display the resulting frame
     if SHOW_VIDEO:
-        resizedFrame = cv2.resize(frame,(0,0),fx = 0.80,fy = 0.80)
+        resizedFrame = cv2.resize(frame,(0,0),fx = 0.90,fy = 0.90)
         cv2.imshow('frame', resizedFrame)
         # the 'q' button is set as the
         # quitting button you may use any

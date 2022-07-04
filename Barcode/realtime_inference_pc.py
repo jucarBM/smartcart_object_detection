@@ -9,7 +9,7 @@ from utils.centroidtracker import CentroidTracker
 from utils.trackableobject import TrackableObject
 import tensorflow as tf
 # from pyzbar.pyzbar import decode
-PATH_TO_MODEL_DIR = "models/fine_tuned_model_last"
+PATH_TO_MODEL_DIR = "models/fine_tuned_model_nb_5"
 # PATH_TO_MODEL_DIR = "../Barcode/models/fine_tuned_model_5000_ds"
 PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
 # PATH_TO_SAVE_MODEL = PATH_TO_MODEL_DIR

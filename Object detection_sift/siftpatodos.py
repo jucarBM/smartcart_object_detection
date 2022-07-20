@@ -124,7 +124,13 @@ Keyys = [keypts11,keypts12,keypts13,keypts21,keypts22,keypts23,keypts31,keypts32
 
 Names=['RITZ','RITZ','RITZ','CHIPS','CHIPS','CHIPS','LAIVE','LAIVE','LAIVE','JABON','JABON','JABON','INKA','INKA','INKA']
 
+# IIIS  = [I11rtiz,I21rtiz,I31rtiz,I41rtiz,I51rtiz]
 
+# Descriptors = [descriptores11,descriptores21,descriptores31,descriptores41,descriptores51]
+
+# Keyys = [keypts11,keypts21,keypts31,keypts41,keypts51]
+
+# Names=['RITZ','CHIPS','LAIVE','JABON','INKA']
 # Parámetros de FLANN para ser usados con SIFT
 FLANN_INDEX_KDTREE = 1
 index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
@@ -145,7 +151,7 @@ for filename in glob.glob("*jpeg"):
 
   
 
-
+    t77=time.time()
     # -------------ingresamos imagne objetivo
     I2 = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     T4 = time.time()
@@ -220,11 +226,12 @@ for filename in glob.glob("*jpeg"):
     plt.show()
 
     t3=time.time()
-
+    print(t2-t77)
     print(t1-t0)
     print(t2-t1)
     print(t3-t2)
     print(t5-T4)
+    
       # GUARDAR DIRECTORIO
     with open ('datatest1.txt','a') as f:
         f.write(str(index_pos_list))

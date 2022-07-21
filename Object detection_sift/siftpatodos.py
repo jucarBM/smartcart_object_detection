@@ -8,6 +8,8 @@ t0=time.time()
 # ------------------
 sift = cv2.SIFT_create() # SE CREA EL SIFT
 # ----------------
+
+# ----------------
 import rawpy
 import imageio
 import time
@@ -214,6 +216,20 @@ for filename in glob.glob("*jpeg"):
 
     print(index_pos_list)
 
+    namesEscogidos = []
+    for i in range(len(index_pos_list)):
+        namesEscogidos.append(Names[index_pos_list[i]])
+
+    print(namesEscogidos)
+
+    import nltk
+    # list_of_words=['Cars', 'Cats', 'Flowers', 'Cats']
+    frequency_distribution = nltk.FreqDist(namesEscogidos) 
+    most_common_element = frequency_distribution.max()
+    print(filename)
+    print ("The most common element is -",most_common_element)
+
+
     t2=time.time()
     img_matches = cv2.drawMatchesKnn(IIIS[index_pos_list[0]], Keyys[index_pos_list[0]], I2, keypts2, M[index_pos_list[0]], None,
                                     matchColor=(0, 255, 0), 
@@ -236,7 +252,7 @@ for filename in glob.glob("*jpeg"):
     with open ('datatest1.txt','a') as f:
         f.write(str(index_pos_list))
         f.write('\n')
-        f.write(str(Names[index_pos_list[0]]))
+        f.write(str(most_common_element))
         f.write('\n')
         f.close()
 
